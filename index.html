@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Экзамен в МЧС</title>
-<link rel="stylesheet" href="main/styles.css">
-<link rel="shortcut icon" href="main/smoke-detector.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Экзамен в МЧС</title>
+  <link rel="stylesheet" href="main/styles.css">
+  <link rel="shortcut icon" href="main/smoke-detector.png">
 </head>
+
 <body>
-<div class="main-title">
-  <h4 id='title'>Проверка знаний специалистов по монтажу, наладке и техническом обслуживании пожарной автоматики<br>Вопросы МЧС</br></h4>
-  <img class="logo-img" src="images/logo.png" alt="logo">
-</div>
-<div class="quiz-container">
-  <div id="question-number"></div>
-  <div id="results"></div>
-  <div id="quiz">
-    <div id="answers-buttons"></div>
+  <div class="main-title">
+    <h4 id='title'>Проверка знаний специалистов по монтажу, наладке и техническом обслуживании пожарной
+      автоматики<br>Вопросы МЧС</br></h4>
+    <img class="logo-img" src="images/logo.png" alt="logo">
   </div>
-  <div class="main-buttons">
-    <button id="montaz-naladka-tests">Монтаж и наладка ПА</button>
-    <button id="to-tests">Техническое обслуживание ПА</button>
-    <button id="exam" style="display: none;">Экзамен</button>
-    <button id="training" style="display: none;">Проверка знаний</button>
+  <div class="quiz-container">
+    <div id="question-number"></div>
+    <div id="results"></div>
+    <div id="quiz">
+      <div id="answers-buttons"></div>
+    </div>
+    <div class="main-buttons">
+      <button id="montaz-naladka-tests">Монтаж и наладка ПА</button>
+      <button id="to-tests">Техническое обслуживание ПА</button>
+      <button id="exam" style="display: none;">Экзамен</button>
+      <button id="training" style="display: none;">Проверка знаний</button>
+    </div>
+    <button id="next" style="display: none;">Далее</button>
+    <button id="restart" style="display: none;">Главное меню</button>
   </div>
-  <button id="next" style="display: none;">Далее</button>
-  <button id="restart" style="display: none;">Главное меню</button>
-</div>
   <!-- Modal Window -->
   <div id="modal">
     <div class="modal-content">
       <h2>Начинается проверка знаний.</h2>
       <h3>Желаем успеха!</h3>
-      <p>Вам будет предложено 10 вопросов.<br>Подтверждение ответа на вопрос осуществляется путем нажатия на один из предложеных вариантов.</br></p>
+      <p>Вам будет предложено 10 вопросов.<br>Подтверждение ответа на вопрос осуществляется путем нажатия на один из
+        предложеных вариантов.</br></p>
       <button id="modal-button">Начать экзамен</button>
     </div>
   </div>
-<footer>© ЛСПАиО ИТЦ<br>2024</br></footer>
-<script src="main/script.js"></script>
+  <footer>© ЛСПАиО ИТЦ<br>2024</br></footer>
+  <script src="main/script.js"></script>
 </body>
+
 </html>
