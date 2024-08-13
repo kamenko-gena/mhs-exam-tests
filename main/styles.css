@@ -5,6 +5,7 @@
   .logo-img {
     width: 5em;
     height: 5em;
+    margin-left: 2em;
   }
   
   button {
@@ -32,6 +33,7 @@
   
   .main-title {
     display: flex;
+    align-items: center;
     margin-left: 2em;
     margin-right: 2em;
     font-size: small;
@@ -109,7 +111,7 @@
   footer {
     position: fixed;
     bottom: 0.5em;
-    width: 97%;
+    right: 2em;
     font-size: small;
     text-align: right;
   }  
