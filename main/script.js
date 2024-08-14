@@ -40,7 +40,7 @@ let montazhNaladkaData = [
   },
   {
     question:
-      "На каком расстоянии от уровня пола проводится измерение уровня звВ период наладки отдельных элементов систем ПАука?",
+      "На каком расстоянии от уровня пола проводится измерение уровня звука?",
     answers: {
       a: "1,75 м",
       b: "1 м",
@@ -573,7 +573,7 @@ let montazhNaladkaData = [
     },
     description:
       "НПБ 23-2010 Противодымная защита зданий и сооружений. Методы приемо-сдаточных и периодических испьтаний. П. 12",
-    correctAnswer: "b",
+    correctAnswer: "a",
     userAnswer: null,
   },
   {
@@ -1816,7 +1816,7 @@ let montazhNaladkaData = [
       c: "в каждом втором отсеке потолка",
     },
     description: "п. 12.3.14 СН 2.02.03-2019",
-    correctAnswer: "c",
+    correctAnswer: "a",
     userAnswer: null,
   },
   {
@@ -2059,7 +2059,7 @@ let montazhNaladkaData = [
   {
     question: "-это",
     answers: {
-      a: "ручной ИП (Ответ",
+      a: "ручной ИП",
       b: "тепловой ИП",
       c: "дымовой ИП",
     },
@@ -2269,7 +2269,7 @@ let montazhNaladkaData = [
   },
   {
     question:
-      "Каково минимальное расстояние от оптической соси линейного дымового ПИ до стены либо окружающих предметов?",
+      "Каково минимальное расстояние от оптической оси линейного дымового ПИ до стены либо окружающих предметов?",
     answers: {
       a: "0.9 м",
       b: "0.2 м",
@@ -3601,9 +3601,7 @@ let toData = [
   },
 ];
 
-const montazhNaladkaTestsButton = document.getElementById(
-  "montaz-naladka-tests"
-);
+const montazhNaladkaTestsButton = document.getElementById("montaz-naladka-tests");
 const toTestsButton = document.getElementById("to-tests");
 const title = document.getElementById("title");
 const quizContainer = document.getElementById("quiz");
@@ -3642,8 +3640,7 @@ function closeModal() {
 
 function startMontazhNaladkaTests() {
   quizData = montazhNaladkaData.slice();
-  shuffle(quizData);
-  // quizData.sort(() => Math.random() - 0.5);
+  // shuffle(quizData);
   initialQuizData = quizData.slice();
   montazhNaladkaTestsButton.style.display = "none";
   toTestsButton.style.display = "none";
@@ -3654,8 +3651,7 @@ function startMontazhNaladkaTests() {
 
 function startToTests() {
   quizData = toData.slice();
-  shuffle(quizData);
-  // quizData.sort(() => Math.random() - 0.5);
+  // shuffle(quizData);
   initialQuizData = quizData.slice();
   montazhNaladkaTestsButton.style.display = "none";
   toTestsButton.style.display = "none";
@@ -3669,6 +3665,7 @@ function startExam() {
   modal.style.display = "flex";
   modal.style.alignItems = "center";
   testType = "Exam";
+  shuffle(quizData);
   const examQuestions = quizData.slice(0, 10);
   setQuizData(examQuestions);
   examButton.style.display = "none";
@@ -3701,7 +3698,7 @@ function buildQuiz() {
   answers.sort(() => Math.random() - 0.5);
 
   output.push(
-    `<div class="question" style="font-size: large; font-weight: 600; text-align: center"> ${currentQuestionData.question} </div>`
+    `<div class="question" style="padding: 0 5em; font-size: large; font-weight: 600; text-align: center"> ${currentQuestionData.question} </div>`
   );
 
   if (currentQuestionData.image) {
@@ -3794,7 +3791,9 @@ function nextQuestion() {
 }
 
 function restartQuiz() {
-  quizData.sort(() => Math.random() - 0.5);
+  if (testType !== "Training") {
+    quizData.sort(() => Math.random() - 0.5);
+  }
 
   currentQuestion = 0;
   numCorrect = 0;

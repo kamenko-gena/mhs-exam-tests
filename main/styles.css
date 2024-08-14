@@ -46,6 +46,7 @@ button:hover {
 
 #question-number {
   font-size: small;
+  margin-bottom: 1em;
 }
 
 #next {
