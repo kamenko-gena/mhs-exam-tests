@@ -3640,6 +3640,7 @@ function closeModal() {
 }
 
 function startMontazhNaladkaTests() {
+  restartButton.style.display = "block";
   quizData = montazhNaladkaData.slice();
   // shuffle(quizData);
   initialQuizData = quizData.slice();
@@ -3651,6 +3652,7 @@ function startMontazhNaladkaTests() {
 }
 
 function startToTests() {
+  restartButton.style.display = "block";
   quizData = toData.slice();
   // shuffle(quizData);
   initialQuizData = quizData.slice();
@@ -3722,7 +3724,7 @@ function buildQuiz() {
   });
 
   quizContainer.innerHTML = output.join("");
-  questionNumber.innerHTML = `Вопрос №${currentQuestion + 1} из ${
+  questionNumber.innerHTML = `Вопрос № ${currentQuestion + 1} из ${
     quizData.length
   }`;
 }

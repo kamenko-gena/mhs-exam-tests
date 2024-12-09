@@ -44,13 +44,15 @@ button:hover {
   justify-content: space-between;
 }
 
-#question-number {
+#question-number-container {
   font-size: small;
   margin-bottom: 1em;
 }
 
-#next {
+#next, #restart {
+  display: none;
   margin-top: 2em;
+  font-size: 1rem;
 }
 
 .question {
@@ -118,9 +120,7 @@ button:hover {
 }
 
 footer {
-  position: fixed;
-  bottom: 0.5em;
-  right: 2em;
-  font-size: small;
+  font-size: x-small;
   text-align: right;
+  color: rgba(0, 0, 0, 0.5);
 }
