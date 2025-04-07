@@ -58,5 +58,5 @@
       "changeDetection": "OnPush"
     }
   },
-  "defaultProject": "mhs-exam-tests-upgrade"
+  "defaultProject": "mhs-exam-tests"
 }

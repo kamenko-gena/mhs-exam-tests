@@ -17,5 +17,5 @@ import { MainPageComponent } from './components/main-page/main-page.component';
     styleUrl: './app.component.less',
 })
 export class AppComponent {
-    title = 'mhs-exam-tests-upgrade';
+    title = 'mhs-exam-tests';
 }

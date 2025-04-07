@@ -1,5 +1,5 @@
 {
-  "name": "mhs-exam-tests-upgrade",
+  "name": "mhs-exam-tests",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
@@ -10,7 +10,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/mhs-exam-tests-upgrade",
+        "outputPath": "dist/mhs-exam-tests",
         "index": "./src/index.html",
         "main": "./src/main.ts",
         "polyfills": ["zone.js"],
@@ -70,10 +70,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "mhs-exam-tests-upgrade:build:production"
+          "buildTarget": "mhs-exam-tests:build:production"
         },
         "development": {
-          "buildTarget": "mhs-exam-tests-upgrade:build:development"
+          "buildTarget": "mhs-exam-tests:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "mhs-exam-tests-upgrade:build"
+        "buildTarget": "mhs-exam-tests:build"
       }
     },
     "lint": {

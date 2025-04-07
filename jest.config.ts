@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'mhs-exam-tests-upgrade',
+  displayName: 'mhs-exam-tests',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/mhs-exam-tests-upgrade',
+  coverageDirectory: './coverage/mhs-exam-tests',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

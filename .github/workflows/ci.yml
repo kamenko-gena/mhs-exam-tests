@@ -24,7 +24,7 @@ jobs:
         run: npm run build
 
       - name: Copy 404.html to dist directory
-        run: cp dist/mhs-exam-tests-upgrade/index.html dist/mhs-exam-tests-upgrade/404.html
+        run: cp dist/mhs-exam-tests/index.html dist/mhs-exam-tests/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -32,7 +32,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist/mhs-exam-tests-upgrade'
+          path: 'dist/mhs-exam-tests'
 
       - name: Deploy to GitHub Pages
         id: deployment

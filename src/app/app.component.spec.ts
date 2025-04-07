@@ -14,13 +14,13 @@ describe('AppComponent', () => {
         fixture.detectChanges();
         const compiled = fixture.nativeElement as HTMLElement;
         expect(compiled.querySelector('h1')?.textContent).toContain(
-            'Welcome mhs-exam-tests-upgrade',
+            'Welcome mhs-exam-tests',
         );
     });
 
-    it(`should have as title 'mhs-exam-tests-upgrade'`, () => {
+    it(`should have as title 'mhs-exam-tests'`, () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.componentInstance;
-        expect(app.title).toEqual('mhs-exam-tests-upgrade');
+        expect(app.title).toEqual('mhs-exam-tests');
     });
 });

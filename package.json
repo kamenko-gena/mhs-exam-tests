@@ -1,5 +1,5 @@
 {
-  "name": "@mhs-exam-tests-upgrade/source",
+  "name": "@mhs-exam-tests/source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
