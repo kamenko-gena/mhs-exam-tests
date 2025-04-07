@@ -1,0 +1,152 @@
+<div class="container">
+    @if (questionsForShow()){
+    <div class="progress-bar-block">
+        <progress
+            tuiProgressBar
+            size="s"
+            [value]="userClosedQuestions.length"
+            [max]="allQuestionsData.length"
+        ></progress>
+        <span>{{progressPercent()}}%</span>
+    </div>
+    <div class="title-container">
+        <p>Вопрос: {{currentNum+1}} из {{allQuestionsData.length}}</p>
+        <tui-input-number
+            class="input-number-field"
+            tuiTextfieldSize="s"
+            [formControl]="inputQuestionNumber"
+            (input)="setQuestionNumber()"
+            >Введите № вопроса
+        </tui-input-number>
+    </div>
+    <h3 class="question-text">{{questionsForShow()?.question}}</h3>
+    @if(questionsForShow()?.image) {
+    <img
+        class="question-iamge"
+        src="assets/{{questionsForShow()?.image}}"
+        [alt]="questionsForShow()?.image"
+    />
+    } @if(showErrorExpand()) {
+    <div class="error-expand">
+        <h5>Неправильно!</h5>
+        <p>{{questionsForShow()?.description}}</p>
+    </div>
+    } @if(showCorrectExpand()) {
+    <div class="correct-expand">
+        <h5>Правильно!</h5>
+    </div>
+    }
+    <div class="answers">
+        @for(item of questionsForShow()?.answers! | keyvalue | randomData; track
+        $index) {
+        <tui-radio-labeled
+            [formControl]="userAnswer"
+            size="m"
+            [item]="item.key"
+        >
+            <span
+                [ngClass]="getClass(item.key, questionsForShow()?.correctAnswer??'')"
+                >{{item.value}}</span
+            >
+        </tui-radio-labeled>
+        }
+    </div>
+
+    <div class="buttons-container">
+        <div class="arrow-buttons-container">
+            <button
+                [disabled]="currentNum <= 0"
+                appearance="flat"
+                icon="tuiIconArrowLeft"
+                tuiButton
+                size="s"
+                type="button"
+                (click)="showQuestionByNumber(currentNum-1)"
+            >
+                Назад
+            </button>
+
+            <button
+                [disabled]="currentNum === allQuestionsData.length - 1"
+                appearance="flat"
+                iconRight="tuiIconArrowRight"
+                tuiButton
+                size="s"
+                type="button"
+                (click)="showQuestionByNumber(currentNum+1)"
+            >
+                Далее
+            </button>
+        </div>
+        <div class="answer-button">
+            <button
+                size="m"
+                appearance="accent"
+                [disabled]="!userAnswer.value || userAnswer.status === 'DISABLED'"
+                tuiButton
+                (click)="answer((questionsForShow()?.correctAnswer??''), currentNum)"
+            >
+                Ответить
+            </button>
+        </div>
+    </div>
+    <div class="footer-buttons">
+        @if(!sectionName.includes('exam')) {
+        <div class="footer-block">
+            <button
+                tuiButton
+                appearance="flat"
+                size="s"
+                (click)="shuffleQuestions()"
+            >
+                Перемешать вопросы
+            </button>
+            <button
+                (click)=" resetDataQuestions()"
+                appearance="flat"
+                size="s"
+                tuiButton
+            >
+                Заново
+            </button>
+        </div>
+
+        }
+
+        <button
+            class="main-menu-button"
+            appearance="outline"
+            size="s"
+            routerLink="/"
+            tuiButton
+        >
+            Главное меню
+        </button>
+    </div>
+
+    }
+</div>
+
+<ng-template #ExamFailed>
+    <tui-badge
+        class="faild-badge-title"
+        status="custom"
+        value="😔 Экзамен не сдан!"
+    ></tui-badge>
+    <div>
+        Вы ответили на <b>{{userCorrectAnswers}}</b> вопроса(ов) из
+        <b>{{allQuestionsData.length}}</b>
+    </div>
+</ng-template>
+
+<ng-template #ExamPassed>
+    <tui-badge
+        class="passed-badge-title"
+        status="custom"
+        value="😎 Экзамен сдан!"
+    ></tui-badge>
+    <div>
+        Вы ответили на <b>{{userCorrectAnswers}}</b> вопроса(ов) из
+        <b>{{allQuestionsData.length}}</b>
+    </div>
+</ng-template>
