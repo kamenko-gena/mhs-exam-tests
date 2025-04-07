@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "master",
+  "defaultBase": "main",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -58,6 +58,5 @@
       "changeDetection": "OnPush"
     }
   },
-  "defaultProject": "mhs-exam-tests",
-  "nxCloudAccessToken": "ZDYzZDZkMzktNzIwYi00MDUyLTlmMTEtMzk4NjFkNGVkMDZmfHJlYWQtd3JpdGU="
+  "defaultProject": "mhs-exam-tests"
 }
