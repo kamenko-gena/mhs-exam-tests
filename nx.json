@@ -58,5 +58,6 @@
       "changeDetection": "OnPush"
     }
   },
-  "defaultProject": "mhs-exam-tests"
+  "defaultProject": "mhs-exam-tests",
+  "nxCloudAccessToken": "ZDU4ODc5NjEtZjcwOC00YWRhLWEyZTEtYTUyODNlZThjMDM3fHJlYWQtd3JpdGU="
 }
