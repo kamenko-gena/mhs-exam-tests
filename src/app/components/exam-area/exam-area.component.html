@@ -36,21 +36,19 @@
         <h5>Правильно!</h5>
     </div>
     }
-    <div class="answers">
-        @for(item of questionsForShow()?.answers! | keyvalue | randomData; track
-        $index) {
-        <tui-radio-labeled
-            [formControl]="userAnswer"
-            size="m"
-            [item]="item.key"
-        >
+    <form class="answers" [formGroup]="answersFormGroup">
+        @for(item of answersKey; track $index) { @if(
+        questionsForShow()?.answers?.hasOwnProperty(item)) {
+        <tui-checkbox-labeled [formControlName]="item">
             <span
-                [ngClass]="getClass(item.key, questionsForShow()?.correctAnswer??'')"
-                >{{item.value}}</span
+                [ngClass]="getClass(item, questionsForShow()?.correctAnswer??'')"
+                >{{questionsForShow()?.answers?.[item]}} {{item}}
+                {{answersFormGroup.get(item)?.value}}</span
             >
-        </tui-radio-labeled>
-        }
-    </div>
+        </tui-checkbox-labeled>
+
+        } }
+    </form>
 
     <div class="buttons-container">
         <div class="arrow-buttons-container">
@@ -82,7 +80,7 @@
             <button
                 size="m"
                 appearance="accent"
-                [disabled]="!userAnswer.value || userAnswer.status === 'DISABLED'"
+                [disabled]="!answersFormGroup.dirty"
                 tuiButton
                 (click)="answer((questionsForShow()?.correctAnswer??''), currentNum)"
             >
