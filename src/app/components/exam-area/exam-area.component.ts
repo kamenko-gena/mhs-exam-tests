@@ -115,13 +115,11 @@ export class ExamAreaComponent implements OnInit {
                 this.answersKey[i],
             ];
         }
-        console.log(this.answersKey);
     }
 
     startExam(): void {
         this.answersFormGroup.reset();
         this.questionsForShow.set(this.allQuestionsData[this.currentNum]);
-        console.log('Ответы после set: ', this.questionsForShow()?.answers);
         this.userClosedQuestions.includes(
             this.allQuestionsData[this.currentNum].id,
         )
@@ -129,13 +127,32 @@ export class ExamAreaComponent implements OnInit {
             : this.answersFormGroup.enable();
     }
 
-    answer(correctAnswer: string, questionNum: number): void {
-        console.log(this.answersFormGroup.getRawValue());
+    answer(
+        correctAnswer: string,
+        questionNum: number,
+        answersData: QuestionInterface['answers'],
+    ): void {
+        const correctAnswerArr: string[] = correctAnswer.split('');
+        const userAnswers = this.answersFormGroup.getRawValue();
+        let answerResult = true;
+        console.log('Ответы юзера:', userAnswers);
         this.answersFormGroup.disable();
-        this.showAnswer = true;
-        if (this.userAnswer.value !== correctAnswer) {
-            this.showErrorExpand.set(true);
-        } else {
+
+        for (const key in answersData) {
+            const typedKey = key as keyof typeof answersData;
+            if (correctAnswerArr.includes(typedKey) && userAnswers[typedKey]) {
+                continue;
+            } else if (
+                !correctAnswerArr.includes(typedKey) &&
+                userAnswers[typedKey]
+            ) {
+                answerResult = false;
+                this.showErrorExpand.set(true);
+                break;
+            }
+        }
+
+        if (answerResult) {
             this.showCorrectExpand.set(true);
             ++this.userCorrectAnswers;
             localStorage.setItem(
@@ -143,6 +160,7 @@ export class ExamAreaComponent implements OnInit {
                 this.userCorrectAnswers.toString(),
             );
         }
+        this.showAnswer = true;
 
         this.userClosedQuestions = [
             ...this.userClosedQuestions,
@@ -166,17 +184,22 @@ export class ExamAreaComponent implements OnInit {
     }
 
     getClass(itemName: string, correctAnswer: string): string {
+        const userAnswers = this.answersFormGroup.getRawValue();
         if (!this.showAnswer) {
             return '';
         }
-        if (itemName === correctAnswer) {
+        if (correctAnswer.split('').includes(itemName)) {
             return 'correct-answer';
         }
-        if (
-            this.userAnswer.value !== correctAnswer &&
-            this.userAnswer.value === itemName
-        ) {
-            return 'failed-answer';
+        for (const key in this.questionsForShow()?.answers) {
+            const typedKey = key as keyof typeof userAnswers;
+            if (
+                //помечает и те что пользователь не выбирал
+                userAnswers[typedKey] &&
+                !correctAnswer.split('').includes(key)
+            ) {
+                return 'failed-answer';
+            }
         }
         return '';
     }
@@ -198,7 +221,6 @@ export class ExamAreaComponent implements OnInit {
         this.showCorrectExpand.set(false);
         this.currentNum = questionNum;
         this.questionsForShow.set(this.allQuestionsData[this.currentNum]);
-        console.log('Ответы после set: ', this.questionsForShow()?.answers);
         if (this.userQuestionNum) {
             localStorage.setItem(
                 `currentQuestion-${this.sectionName}`,

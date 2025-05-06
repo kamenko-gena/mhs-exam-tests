@@ -40,8 +40,7 @@
         @for(item of answersKey; track $index) { @if(
         questionsForShow()?.answers?.hasOwnProperty(item)) {
         <tui-checkbox-labeled [formControlName]="item">
-            <span
-                [ngClass]="getClass(item, questionsForShow()?.correctAnswer??'')"
+            <span [ngClass]="getClass(item, questionsForShow()?.correctAnswer!)"
                 >{{questionsForShow()?.answers?.[item]}} {{item}}
                 {{answersFormGroup.get(item)?.value}}</span
             >
@@ -82,7 +81,7 @@
                 appearance="accent"
                 [disabled]="!answersFormGroup.dirty"
                 tuiButton
-                (click)="answer((questionsForShow()?.correctAnswer??''), currentNum)"
+                (click)="answer((questionsForShow()?.correctAnswer!), currentNum, (questionsForShow()?.answers!))"
             >
                 Ответить
             </button>
