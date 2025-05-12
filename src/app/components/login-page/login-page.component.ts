@@ -131,7 +131,7 @@ export class LoginPageComponent implements OnInit {
                     .subscribe();
                 this.loadingBtn.set(false);
                 this.loginFormGroup.reset();
-                this.router.navigateByUrl('/');
+                this.router.navigateByUrl('/admin');
             },
         });
     }
