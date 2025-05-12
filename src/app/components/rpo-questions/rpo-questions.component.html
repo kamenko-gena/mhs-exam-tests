@@ -1,0 +1,36 @@
+<h3>Вопросы РПО.</h3>
+
+@if(showQuestions()) {
+<app-exam-area
+    sectionName="{{sectionName}}-{{(showQuestions() ?? '' )}}"
+    [allQuestionsData]="((showQuestions() ?? '' ) === 'exam') ? examQuestions : allQuestions"
+></app-exam-area>
+} @else {
+<button
+    class="section-button"
+    [disabled]="setLoading()"
+    tuiButton
+    (click)="startQuestions('all')"
+    [showLoader]="setLoading()"
+>
+    Все вопросы
+</button>
+<button
+    class="section-button"
+    [disabled]="setLoading()"
+    tuiButton
+    (click)="startQuestions('exam')"
+    [showLoader]="setLoading()"
+>
+    Экзамен
+</button>
+<button
+    class="section-button"
+    appearance="outline"
+    size="s"
+    routerLink="/"
+    tuiButton
+>
+    Главное меню
+</button>
+}
