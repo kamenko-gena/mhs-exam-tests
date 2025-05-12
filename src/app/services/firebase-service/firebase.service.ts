@@ -16,6 +16,7 @@ export class FirebaseService {
         this.firestore,
         'mhs-montazh',
     );
+    private readonly rpoQuestionsCollect = collection(this.firestore, 'rpo');
 
     getMhsTOQuestions(): Observable<QuestionInterface[]> {
         return collectionData(this.mhsToQuestionsCollect, {
@@ -25,6 +26,12 @@ export class FirebaseService {
 
     getMhsMontazhQuestions(): Observable<QuestionInterface[]> {
         return collectionData(this.mhsMontazhQuestionsCollect, {
+            idField: 'id',
+        }) as Observable<QuestionInterface[]>;
+    }
+
+    getRpoQuestions(): Observable<QuestionInterface[]> {
+        return collectionData(this.rpoQuestionsCollect, {
             idField: 'id',
         }) as Observable<QuestionInterface[]>;
     }
