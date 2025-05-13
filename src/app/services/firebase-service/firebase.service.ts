@@ -1,6 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import {
+    addDoc,
+    collection,
+    collectionData,
+    Firestore,
+} from '@angular/fire/firestore';
+import { catchError, from, map, Observable, of, take } from 'rxjs';
+import { QuestionDataFormInterface } from 'src/app/interfaces/question-data-form-interface';
 import { QuestionInterface } from 'src/app/interfaces/question-interface';
 
 @Injectable({
@@ -35,9 +41,22 @@ export class FirebaseService {
             idField: 'id',
         }) as Observable<QuestionInterface[]>;
     }
+    //Отправка одного вопроса
+    addRpoQuestion(
+        questionData: QuestionDataFormInterface,
+    ): Observable<string | null> {
+        return from(addDoc(this.rpoQuestionsCollect, questionData)).pipe(
+            map((response) => response.id),
+            catchError((err) => {
+                console.log('Ошибка: ', err);
+                return of(null);
+            }),
+            take(1),
+        );
+    }
 }
 
-//Отправка вопросов
+//Отправка массива вопросов
 // addMhsToQuestions(): Observable<string> {
 //     for (const data of this.questionsDataTo) {
 //         setTimeout(() => {

@@ -1,15 +1,13 @@
 type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
-export interface QuestionInterface {
+export interface QuestionDataFormInterface {
     question: string;
     answers: {
         a: string;
         b: string;
         c: string;
-        d?: string;
-        e?: string;
+        d?: string | null;
+        e?: string | null;
     };
     description: string;
-    correctAnswer: AnswerKey;
-    id: string;
-    image?: string;
+    correctAnswer: AnswerKey | string;
 }

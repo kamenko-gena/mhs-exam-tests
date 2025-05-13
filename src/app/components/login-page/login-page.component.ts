@@ -54,6 +54,7 @@ import { take } from 'rxjs';
             provide: TUI_VALIDATION_ERRORS,
             useValue: {
                 required: 'Обязательное заполнение!',
+                email: 'Неверный email',
                 minlength: ({ requiredLength }: { requiredLength: string }) =>
                     `Минимальная длинна ${requiredLength}`,
             },
@@ -80,7 +81,11 @@ export class LoginPageComponent implements OnInit {
 
     readonly loginFormGroup = new FormGroup({
         email: new FormControl<string | null>('', {
-            validators: [Validators.required, Validators.minLength(6)],
+            validators: [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.email,
+            ],
         }),
         password: new FormControl<string | null>('', {
             validators: [Validators.required, Validators.minLength(8)],
