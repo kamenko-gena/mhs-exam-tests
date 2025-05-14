@@ -25,7 +25,7 @@ import {
     TuiPromptModule,
     TuiTextareaModule,
 } from '@taiga-ui/kit';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
     FormControl,
     FormGroup,
@@ -52,6 +52,7 @@ type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
         TuiErrorModule,
         TuiInputModule,
         TuiAlertModule,
+        RouterLink,
     ],
     providers: [
         {

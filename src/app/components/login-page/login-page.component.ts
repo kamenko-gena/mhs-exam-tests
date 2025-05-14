@@ -31,6 +31,8 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 import { Router, RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 
+const adminEmail = 'lspaio@btg.by';
+
 @Component({
     selector: 'app-login-page',
     standalone: true,
@@ -126,7 +128,16 @@ export class LoginPageComponent {
                     .subscribe();
                 this.loadingBtn.set(false);
                 this.loginFormGroup.reset();
-                this.router.navigateByUrl('/rpo');
+                this.authService
+                    .getCurrentUser()
+                    .pipe(take(1))
+                    .subscribe({
+                        next: (user) => {
+                            user?.email === adminEmail;
+                        },
+                    })
+                    ? this.router.navigateByUrl('/admin')
+                    : this.router.navigateByUrl('/rpo');
             },
         });
     }
