@@ -1,4 +1,60 @@
-<p>admin-area works!</p>
+<h3 class="tui-text_h5">Создание вопроса</h3>
+<form
+    class="questionFormGroup"
+    [formGroup]="questionFormGroup"
+    (submit)="addQuestion()"
+>
+    <div class="option">
+        <tui-input formControlName="question"> Вопрос </tui-input>
+        <tui-error
+            formControlName="question"
+            [error]="[] | tuiFieldError | async"
+        ></tui-error>
+    </div>
+    <div class="option">
+        <tui-textarea formControlName="description">Документ</tui-textarea>
+        <tui-error
+            formControlName="description"
+            [error]="[] | tuiFieldError | async"
+        ></tui-error>
+    </div>
+    @if(getAnswersFormGroup()) {
+    <div [formGroup]="getAnswersFormGroup()">
+        @for (item of answersKey; track $index) {
+        <div class="option">
+            <tui-input [formControlName]="item"> Вариант {{ item }} </tui-input>
+            <tui-error
+                [formControlName]="item"
+                [error]="[] | tuiFieldError | async"
+            ></tui-error>
+        </div>
+        }
+    </div>
+
+    }
+
+    <div class="option">
+        <tui-input formControlName="correctAnswer">
+            Правильный ответ
+        </tui-input>
+        <tui-error
+            formControlName="correctAnswer"
+            [error]="[] | tuiFieldError | async"
+        ></tui-error>
+    </div>
+    <div class="button-container">
+        <button
+            size="m"
+            tuiButton
+            type="submit"
+            [disabled]="!questionFormGroup.valid"
+            [showLoader]="setLoading()"
+        >
+            Отправить
+        </button>
+    </div>
+</form>
+
 <button
     appearance="icon"
     icon="tuiIconLogOutLarge"
