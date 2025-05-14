@@ -6,6 +6,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { RpoQuestionsComponent } from './components/rpo-questions/rpo-questions.component';
 import { AdminAreaComponent } from './components/admin-area/admin-area.component';
 import { authenticationGuard } from './guard/authentication.guard';
+import { adminAuthenticationGuard } from './guard/adminAuthentication.guard';
 
 export const appRoutes: Route[] = [
     {
@@ -19,6 +20,7 @@ export const appRoutes: Route[] = [
     {
         path: 'rpo',
         component: RpoQuestionsComponent,
+        canActivate: [authenticationGuard],
     },
     {
         path: 'login',
@@ -27,10 +29,14 @@ export const appRoutes: Route[] = [
     {
         path: 'admin',
         component: AdminAreaComponent,
-        canActivate: [authenticationGuard],
+        canActivate: [adminAuthenticationGuard],
     },
     {
         path: '',
+        component: MainPageComponent,
+    },
+    {
+        path: '**',
         component: MainPageComponent,
     },
 ];
