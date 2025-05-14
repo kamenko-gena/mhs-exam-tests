@@ -143,8 +143,9 @@ export class ExamAreaComponent implements OnInit {
             if (correctAnswerArr.includes(typedKey) && userAnswers[typedKey]) {
                 continue;
             } else if (
-                !correctAnswerArr.includes(typedKey) &&
-                userAnswers[typedKey]
+                (!correctAnswerArr.includes(typedKey) &&
+                    userAnswers[typedKey]) ||
+                (correctAnswerArr.includes(typedKey) && !userAnswers[typedKey])
             ) {
                 answerResult = false;
                 this.showErrorExpand.set(true);
