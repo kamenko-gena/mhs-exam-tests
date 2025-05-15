@@ -28,7 +28,7 @@ import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 import { RandomDataPipe } from '../pipes/random-data.pipe';
 
-type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
+type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
 @Component({
     selector: 'app-exam-area',
@@ -65,7 +65,7 @@ export class ExamAreaComponent implements OnInit {
     readonly showCorrectExpand = signal<boolean>(false);
     private showAnswer = false;
     private userQuestionNum = '';
-    readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e'];
+    readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     userClosedQuestions: string[] = [];
     userCorrectAnswers = 0;
     currentNum = 0;
@@ -79,6 +79,7 @@ export class ExamAreaComponent implements OnInit {
         c: new FormControl<boolean>(false, { nonNullable: true }),
         d: new FormControl<boolean>(false, { nonNullable: true }),
         e: new FormControl<boolean>(false, { nonNullable: true }),
+        f: new FormControl<boolean>(false, { nonNullable: true }),
     });
 
     ngOnInit(): void {
