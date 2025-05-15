@@ -20,9 +20,11 @@ import { Subscription, take, tap } from 'rxjs';
 import {
     TUI_PROMPT,
     TUI_VALIDATION_ERRORS,
+    TuiDataListWrapperModule,
     TuiFieldErrorPipeModule,
     TuiInputModule,
     TuiPromptModule,
+    TuiSelectModule,
     TuiTextareaModule,
 } from '@taiga-ui/kit';
 import { Router, RouterLink } from '@angular/router';
@@ -37,6 +39,9 @@ import { FirebaseService } from 'src/app/services/firebase-service/firebase.serv
 import { QuestionDataFormInterface } from 'src/app/interfaces/question-data-form-interface';
 
 type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
+const COLLECTIONS = ['МЧС-Монтаж', 'МЧС-ТО', 'Вопросы РПО'];
+type CollectionsName = typeof COLLECTIONS;
+type Collection = CollectionsName[number];
 
 @Component({
     selector: 'app-admin-area',
@@ -52,6 +57,8 @@ type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
         TuiErrorModule,
         TuiInputModule,
         TuiAlertModule,
+        TuiSelectModule,
+        TuiDataListWrapperModule,
         RouterLink,
     ],
     providers: [
@@ -77,6 +84,8 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
     readonly currentUser = signal<string | null>(null);
     readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e'];
+    readonly collections = COLLECTIONS;
+    readonly collectionFormControl = new FormControl<Collection>('Вопросы РПО');
 
     questionFormGroup = new FormGroup({
         question: new FormControl<string>('', {
@@ -144,18 +153,23 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
         if (!questionFormGroupData.answers.e) {
             delete questionFormGroupData.answers.e;
         }
-        this.firebase.addRpoQuestion({ ...questionFormGroupData }).subscribe({
-            complete: () => {
-                this.setLoading.set(false);
-                this.alerts
-                    .open('Вопрос добавлен!', {
-                        label: 'Готово!',
-                        status: 'success',
-                    })
-                    .pipe(take(1))
-                    .subscribe();
-            },
-        });
+        this.firebase
+            .addQuestions(
+                { ...questionFormGroupData },
+                this.collectionFormControl.value ?? 'Вопросы РПО',
+            )
+            .subscribe({
+                complete: () => {
+                    this.setLoading.set(false);
+                    this.alerts
+                        .open('Вопрос добавлен!', {
+                            label: 'Готово!',
+                            status: 'success',
+                        })
+                        .pipe(take(1))
+                        .subscribe();
+                },
+            });
         this.questionFormGroup.reset();
     }
 

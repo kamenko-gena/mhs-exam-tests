@@ -42,10 +42,17 @@ export class FirebaseService {
         }) as Observable<QuestionInterface[]>;
     }
     //Отправка одного вопроса
-    addRpoQuestion(
+    addQuestions(
         questionData: QuestionDataFormInterface,
+        collectionName: string,
     ): Observable<string | null> {
-        return from(addDoc(this.rpoQuestionsCollect, questionData)).pipe(
+        let collection = this.rpoQuestionsCollect;
+        if (collectionName === 'МЧС-ТО') {
+            collection = this.mhsToQuestionsCollect;
+        } else if (collectionName === 'МЧС-Монтаж') {
+            collection = this.mhsMontazhQuestionsCollect;
+        }
+        return from(addDoc(collection, questionData)).pipe(
             map((response) => response.id),
             catchError((err) => {
                 console.log('Ошибка: ', err);
