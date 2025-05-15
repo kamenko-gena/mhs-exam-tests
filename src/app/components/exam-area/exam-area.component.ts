@@ -196,7 +196,6 @@ export class ExamAreaComponent implements OnInit {
         for (const key in this.questionsForShow()?.answers) {
             const typedKey = key as keyof typeof userAnswers;
             if (
-                //помечает и те что пользователь не выбирал
                 userAnswers[typedKey] &&
                 !correctAnswer.split('').includes(key)
             ) {
