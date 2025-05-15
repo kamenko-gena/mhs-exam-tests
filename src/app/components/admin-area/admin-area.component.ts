@@ -38,7 +38,7 @@ import { tuiMarkControlAsTouchedAndValidate } from '@taiga-ui/cdk';
 import { FirebaseService } from 'src/app/services/firebase-service/firebase.service';
 import { QuestionDataFormInterface } from 'src/app/interfaces/question-data-form-interface';
 
-type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e';
+type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 const COLLECTIONS = ['МЧС-Монтаж', 'МЧС-ТО', 'Вопросы РПО'];
 type CollectionsName = typeof COLLECTIONS;
 type Collection = CollectionsName[number];
@@ -66,7 +66,7 @@ type Collection = CollectionsName[number];
             provide: TUI_VALIDATION_ERRORS,
             useValue: {
                 required: 'Обязательное заполнение!',
-                pattern: 'Возможные варианты: a,b,c,d,e',
+                pattern: 'Возможные варианты: a,b,c,d,e,f',
             },
         },
     ],
@@ -83,7 +83,7 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
     readonly setLoading = signal<boolean>(false);
     private subscription: Subscription = new Subscription();
     readonly currentUser = signal<string | null>(null);
-    readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e'];
+    readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     readonly collections = COLLECTIONS;
     readonly collectionFormControl = new FormControl<Collection>('Вопросы РПО');
 
@@ -101,12 +101,10 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
                 nonNullable: true,
                 validators: [Validators.required],
             }),
-            c: new FormControl<string>('', {
-                nonNullable: true,
-                validators: [Validators.required],
-            }),
+            c: new FormControl<string | null>(null),
             d: new FormControl<string | null>(null),
             e: new FormControl<string | null>(null),
+            f: new FormControl<string | null>(null),
         }),
         description: new FormControl<string>('', {
             nonNullable: true,
@@ -114,7 +112,10 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
         }),
         correctAnswer: new FormControl<AnswerKey | string>('', {
             nonNullable: true,
-            validators: [Validators.required, Validators.pattern('[a-e]*')],
+            validators: [
+                Validators.required,
+                Validators.pattern('^(?!.*(.).*\\1)[a-f]*$'),
+            ],
         }),
     });
 
