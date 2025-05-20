@@ -37,6 +37,8 @@ import {
 import { tuiMarkControlAsTouchedAndValidate } from '@taiga-ui/cdk';
 import { FirebaseService } from 'src/app/services/firebase-service/firebase.service';
 import { QuestionDataFormInterface } from 'src/app/interfaces/question-data-form-interface';
+import { QuestionsDataListComponent } from '../questions-data-list/questions-data-list.component';
+import { SectionNameService } from 'src/app/services/section-name/section-name.service';
 
 type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 const COLLECTIONS = ['МЧС-Монтаж', 'МЧС-ТО', 'Вопросы РПО'];
@@ -60,6 +62,7 @@ type Collection = CollectionsName[number];
         TuiSelectModule,
         TuiDataListWrapperModule,
         RouterLink,
+        QuestionsDataListComponent,
     ],
     providers: [
         {
@@ -76,16 +79,21 @@ type Collection = CollectionsName[number];
 })
 export class AdminAreaComponent implements OnInit, OnDestroy {
     private readonly alerts = inject(TuiAlertService);
+    private readonly sectionNameService = inject(SectionNameService);
     private readonly authService = inject(AuthenticationService);
     private readonly dialogs = inject(TuiDialogService);
     private readonly router = inject(Router);
     private readonly firebase = inject(FirebaseService);
     readonly setLoading = signal<boolean>(false);
-    private subscription: Subscription = new Subscription();
+    private authServiceSub: Subscription = new Subscription();
+    private sectionServiceSub: Subscription = new Subscription();
     readonly currentUser = signal<string | null>(null);
     readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     readonly collections = COLLECTIONS;
-    readonly collectionFormControl = new FormControl<Collection>('Вопросы РПО');
+    readonly collectionFormControl = new FormControl<Collection>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
 
     questionFormGroup = new FormGroup({
         question: new FormControl<string>('', {
@@ -120,7 +128,13 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
     });
 
     ngOnInit(): void {
-        this.subscription = this.authService.getCurrentUser().subscribe({
+        this.sectionServiceSub =
+            this.collectionFormControl.valueChanges.subscribe((value) => {
+                if (value) {
+                    this.sectionNameService.setSectionName(value);
+                }
+            });
+        this.authServiceSub = this.authService.getCurrentUser().subscribe({
             next: (receivedUser) => {
                 if (!receivedUser) {
                     this.currentUser.set(null);
@@ -132,7 +146,8 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.sectionServiceSub.unsubscribe();
+        this.authServiceSub.unsubscribe();
     }
 
     getAnswersFormGroup(): FormGroup {
@@ -143,9 +158,11 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
         if (this.questionFormGroup.invalid) {
             tuiMarkControlAsTouchedAndValidate(this.questionFormGroup);
             return;
+        } else if (this.collectionFormControl.invalid) {
+            tuiMarkControlAsTouchedAndValidate(this.collectionFormControl);
+            return;
         }
         this.setLoading.set(true);
-
         const questionFormGroupData: QuestionDataFormInterface =
             this.questionFormGroup.getRawValue();
         if (!questionFormGroupData.answers.d) {
@@ -157,7 +174,7 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
         this.firebase
             .addQuestions(
                 { ...questionFormGroupData },
-                this.collectionFormControl.value ?? 'Вопросы РПО',
+                this.collectionFormControl.value,
             )
             .subscribe({
                 complete: () => {

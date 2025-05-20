@@ -1,11 +1,15 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
 h3 {
     text-align: center;
 }
 
-.questionFormGroup{
-    margin: auto;
-    margin-top: 3em;
-    width: 60vw;
+.content{
+    width: 40vw;
 }
 
 .option{
@@ -23,7 +27,7 @@ h3 {
 }
 
 @media (max-width: 480px) {
-    .questionFormGroup {
-        width: auto;
+    .content {
+        width: 100%;
     }
 }
