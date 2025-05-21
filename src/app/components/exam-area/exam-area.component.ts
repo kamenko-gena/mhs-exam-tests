@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, KeyValuePipe, NgClass } from '@angular/common';
 import { QuestionInterface } from 'src/app/interfaces/question-interface';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
     TuiAlertService,
     TuiButtonModule,
@@ -27,6 +27,8 @@ import {
 import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 import { RandomDataPipe } from '../pipes/random-data.pipe';
+
+type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
 @Component({
     selector: 'app-exam-area',
@@ -45,6 +47,7 @@ import { RandomDataPipe } from '../pipes/random-data.pipe';
         NgClass,
         KeyValuePipe,
         RandomDataPipe,
+        TuiCheckboxLabeledModule,
     ],
     templateUrl: './exam-area.component.html',
     styleUrl: './exam-area.component.less',
@@ -62,6 +65,7 @@ export class ExamAreaComponent implements OnInit {
     readonly showCorrectExpand = signal<boolean>(false);
     private showAnswer = false;
     private userQuestionNum = '';
+    readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     userClosedQuestions: string[] = [];
     userCorrectAnswers = 0;
     currentNum = 0;
@@ -69,7 +73,17 @@ export class ExamAreaComponent implements OnInit {
     readonly userAnswer = new FormControl<string>('');
     readonly inputQuestionNumber = new FormControl<number | null>(null);
 
+    readonly answersFormGroup = new FormGroup({
+        a: new FormControl<boolean>(false, { nonNullable: true }),
+        b: new FormControl<boolean>(false, { nonNullable: true }),
+        c: new FormControl<boolean>(false, { nonNullable: true }),
+        d: new FormControl<boolean>(false, { nonNullable: true }),
+        e: new FormControl<boolean>(false, { nonNullable: true }),
+        f: new FormControl<boolean>(false, { nonNullable: true }),
+    });
+
     ngOnInit(): void {
+        this.shuffleAnswersKey();
         this.userQuestionNum =
             localStorage.getItem(`currentQuestion-${this.sectionName}`) ?? '';
         this.userClosedQuestions =
@@ -94,22 +108,52 @@ export class ExamAreaComponent implements OnInit {
         this.startExam();
     }
 
+    shuffleAnswersKey(): void {
+        for (let i = this.answersKey.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.answersKey[i], this.answersKey[j]] = [
+                this.answersKey[j],
+                this.answersKey[i],
+            ];
+        }
+    }
+
     startExam(): void {
-        this.userAnswer.enable();
+        this.answersFormGroup.reset();
         this.questionsForShow.set(this.allQuestionsData[this.currentNum]);
         this.userClosedQuestions.includes(
             this.allQuestionsData[this.currentNum].id,
         )
-            ? this.userAnswer.disable()
-            : this.userAnswer.enable();
+            ? this.answersFormGroup.disable()
+            : this.answersFormGroup.enable();
     }
 
-    answer(correctAnswer: string, questionNum: number): void {
-        this.showAnswer = true;
-        this.userAnswer.disable();
-        if (this.userAnswer.value !== correctAnswer) {
-            this.showErrorExpand.set(true);
-        } else {
+    answer(
+        correctAnswer: string,
+        questionNum: number,
+        answersData: QuestionInterface['answers'],
+    ): void {
+        const correctAnswerArr: string[] = correctAnswer.split('');
+        const userAnswers = this.answersFormGroup.getRawValue();
+        let answerResult = true;
+        this.answersFormGroup.disable();
+
+        for (const key in answersData) {
+            const typedKey = key as keyof typeof answersData;
+            if (correctAnswerArr.includes(typedKey) && userAnswers[typedKey]) {
+                continue;
+            } else if (
+                (!correctAnswerArr.includes(typedKey) &&
+                    userAnswers[typedKey]) ||
+                (correctAnswerArr.includes(typedKey) && !userAnswers[typedKey])
+            ) {
+                answerResult = false;
+                this.showErrorExpand.set(true);
+                break;
+            }
+        }
+
+        if (answerResult) {
             this.showCorrectExpand.set(true);
             ++this.userCorrectAnswers;
             localStorage.setItem(
@@ -117,6 +161,7 @@ export class ExamAreaComponent implements OnInit {
                 this.userCorrectAnswers.toString(),
             );
         }
+        this.showAnswer = true;
 
         this.userClosedQuestions = [
             ...this.userClosedQuestions,
@@ -140,17 +185,21 @@ export class ExamAreaComponent implements OnInit {
     }
 
     getClass(itemName: string, correctAnswer: string): string {
+        const userAnswers = this.answersFormGroup.getRawValue();
         if (!this.showAnswer) {
             return '';
         }
-        if (itemName === correctAnswer) {
+        if (correctAnswer.split('').includes(itemName)) {
             return 'correct-answer';
         }
-        if (
-            this.userAnswer.value !== correctAnswer &&
-            this.userAnswer.value === itemName
-        ) {
-            return 'failed-answer';
+        for (const key in this.questionsForShow()?.answers) {
+            const typedKey = key as keyof typeof userAnswers;
+            if (
+                userAnswers[typedKey] &&
+                !correctAnswer.split('').includes(key)
+            ) {
+                return 'failed-answer';
+            }
         }
         return '';
     }
@@ -166,7 +215,7 @@ export class ExamAreaComponent implements OnInit {
     }
 
     showQuestionByNumber(questionNum: number): void {
-        this.userAnswer.setValue(null);
+        this.answersFormGroup.reset();
         this.showAnswer = false;
         this.showErrorExpand.set(false);
         this.showCorrectExpand.set(false);
@@ -181,12 +230,12 @@ export class ExamAreaComponent implements OnInit {
         this.userClosedQuestions.includes(
             this.allQuestionsData[this.currentNum].id,
         )
-            ? this.userAnswer.disable()
-            : this.userAnswer.enable();
+            ? this.answersFormGroup.disable()
+            : this.answersFormGroup.enable();
     }
 
     resetDataQuestions(): void {
-        this.userAnswer.setValue(null);
+        this.answersFormGroup.reset();
         this.showAnswer = false;
         this.showErrorExpand.set(false);
         this.showCorrectExpand.set(false);

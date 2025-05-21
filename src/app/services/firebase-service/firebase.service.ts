@@ -1,6 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import {
+    addDoc,
+    collection,
+    collectionData,
+    Firestore,
+} from '@angular/fire/firestore';
+import { catchError, from, map, Observable, of, take } from 'rxjs';
+import { QuestionDataFormInterface } from 'src/app/interfaces/question-data-form-interface';
 import { QuestionInterface } from 'src/app/interfaces/question-interface';
 
 @Injectable({
@@ -16,6 +22,7 @@ export class FirebaseService {
         this.firestore,
         'mhs-montazh',
     );
+    private readonly rpoQuestionsCollect = collection(this.firestore, 'rpo');
 
     getMhsTOQuestions(): Observable<QuestionInterface[]> {
         return collectionData(this.mhsToQuestionsCollect, {
@@ -28,9 +35,35 @@ export class FirebaseService {
             idField: 'id',
         }) as Observable<QuestionInterface[]>;
     }
+
+    getRpoQuestions(): Observable<QuestionInterface[]> {
+        return collectionData(this.rpoQuestionsCollect, {
+            idField: 'id',
+        }) as Observable<QuestionInterface[]>;
+    }
+    //Отправка одного вопроса
+    addQuestions(
+        questionData: QuestionDataFormInterface,
+        collectionName: string,
+    ): Observable<string | null> {
+        let collection = this.rpoQuestionsCollect;
+        if (collectionName === 'МЧС-ТО') {
+            collection = this.mhsToQuestionsCollect;
+        } else if (collectionName === 'МЧС-Монтаж') {
+            collection = this.mhsMontazhQuestionsCollect;
+        }
+        return from(addDoc(collection, questionData)).pipe(
+            map((response) => response.id),
+            catchError((err) => {
+                console.log('Ошибка: ', err);
+                return of(null);
+            }),
+            take(1),
+        );
+    }
 }
 
-//Отправка вопросов
+//Отправка массива вопросов
 // addMhsToQuestions(): Observable<string> {
 //     for (const data of this.questionsDataTo) {
 //         setTimeout(() => {

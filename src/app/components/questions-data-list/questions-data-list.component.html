@@ -1,0 +1,35 @@
+<tui-loader [overlay]="true" [showLoader]="contentLoader()">
+    @if(sectionName && allQuestions) {
+    <p class="list-title">Список вопросов по разделу <b>{{sectionName}}</b></p>
+    <div class="search-bar">
+        <tui-primitive-textfield
+            class="input-textfield"
+            tuiTextfieldSize="m"
+            tuiTextfieldIcon="tuiIconSearch"
+            (valueChange)="searchQuestion($event)"
+        >
+            Поиск по вопросу
+        </tui-primitive-textfield>
+    </div>
+
+    @for(item of questionsToShow$ | async; track $index) {
+    <div class="list-container">
+        @if(item?.image) {
+        <img
+            class="question-iamge"
+            src="assets/{{item?.image}}"
+            [alt]="item?.image"
+        />
+        }
+        <h4>{{item?.question}}</h4>
+        <ul>
+            @for(key of answersKey; track $index) {
+            @if(item.correctAnswer.split('').includes(key)) {
+            <li>
+                <p><b>Ответ {{key}}:</b> {{item.answers[key]}}</p>
+            </li>
+            } }
+        </ul>
+    </div>
+    } }
+</tui-loader>

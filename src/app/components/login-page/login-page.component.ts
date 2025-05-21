@@ -2,7 +2,6 @@ import {
     ChangeDetectionStrategy,
     Component,
     inject,
-    OnInit,
     signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -29,8 +28,10 @@ import {
     TuiInputPasswordModule,
 } from '@taiga-ui/kit';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { take } from 'rxjs';
+
+const adminEmail = 'lspaio@btg.by';
 
 @Component({
     selector: 'app-login-page',
@@ -46,6 +47,7 @@ import { take } from 'rxjs';
         TuiLinkModule,
         TuiAlertModule,
         TuiDialogModule,
+        RouterLink,
     ],
     templateUrl: './login-page.component.html',
     styleUrl: './login-page.component.less',
@@ -54,6 +56,7 @@ import { take } from 'rxjs';
             provide: TUI_VALIDATION_ERRORS,
             useValue: {
                 required: 'Обязательное заполнение!',
+                email: 'Неверный email',
                 minlength: ({ requiredLength }: { requiredLength: string }) =>
                     `Минимальная длинна ${requiredLength}`,
             },
@@ -71,7 +74,7 @@ import { take } from 'rxjs';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent {
     private readonly authService = inject(AuthenticationService);
     private readonly router = inject(Router);
     private readonly alerts = inject(TuiAlertService);
@@ -80,22 +83,16 @@ export class LoginPageComponent implements OnInit {
 
     readonly loginFormGroup = new FormGroup({
         email: new FormControl<string | null>('', {
-            validators: [Validators.required, Validators.minLength(6)],
+            validators: [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.email,
+            ],
         }),
         password: new FormControl<string | null>('', {
             validators: [Validators.required, Validators.minLength(8)],
         }),
     });
-
-    ngOnInit(): void {
-        this.alerts
-            .open('Необходимо войти в учетную запись.', {
-                label: 'Введите логин и пароль!',
-                status: 'info',
-            })
-            .pipe(take(1))
-            .subscribe();
-    }
 
     submitForm() {
         this.loadingBtn.set(true);
@@ -131,7 +128,16 @@ export class LoginPageComponent implements OnInit {
                     .subscribe();
                 this.loadingBtn.set(false);
                 this.loginFormGroup.reset();
-                this.router.navigateByUrl('/');
+                this.authService
+                    .getCurrentUser()
+                    .pipe(take(1))
+                    .subscribe({
+                        next: (user) => {
+                            user?.email === adminEmail;
+                        },
+                    })
+                    ? this.router.navigateByUrl('/admin')
+                    : this.router.navigateByUrl('/rpo');
             },
         });
     }

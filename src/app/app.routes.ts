@@ -3,6 +3,10 @@ import { MhsMontazhQuestionsComponent } from './components/mhs-montazh-questions
 import { MhsToQuestionsComponent } from './components/mhs-to-questions/mhs-to-questions.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { RpoQuestionsComponent } from './components/rpo-questions/rpo-questions.component';
+import { AdminAreaComponent } from './components/admin-area/admin-area.component';
+import { authenticationGuard } from './guard/authentication.guard';
+import { adminAuthenticationGuard } from './guard/adminAuthentication.guard';
 
 export const appRoutes: Route[] = [
     {
@@ -14,11 +18,25 @@ export const appRoutes: Route[] = [
         component: MhsToQuestionsComponent,
     },
     {
+        path: 'rpo',
+        component: RpoQuestionsComponent,
+        canActivate: [authenticationGuard],
+    },
+    {
         path: 'login',
         component: LoginPageComponent,
     },
     {
+        path: 'admin',
+        component: AdminAreaComponent,
+        canActivate: [adminAuthenticationGuard],
+    },
+    {
         path: '',
+        component: MainPageComponent,
+    },
+    {
+        path: '**',
         component: MainPageComponent,
     },
 ];

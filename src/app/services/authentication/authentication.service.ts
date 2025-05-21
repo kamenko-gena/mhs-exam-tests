@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
     Auth,
     signInWithEmailAndPassword,
+    signOut,
     user,
     UserCredential,
 } from '@angular/fire/auth';
@@ -34,6 +35,14 @@ export class AuthenticationService {
                           email: currentUser.email,
                       }
                     : null;
+            }),
+        );
+    }
+
+    logout(): Observable<void | null> {
+        return from(signOut(this.firebaseAuth)).pipe(
+            catchError(() => {
+                return of(null);
             }),
         );
     }
