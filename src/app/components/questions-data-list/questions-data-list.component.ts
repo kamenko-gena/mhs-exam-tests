@@ -6,11 +6,15 @@ import {
     OnInit,
     signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { FirebaseService } from 'src/app/services/firebase-service/firebase.service';
 import { QuestionInterface } from 'src/app/interfaces/question-interface';
-import { Subscription, take } from 'rxjs';
-import { TuiLoaderModule } from '@taiga-ui/core';
+import { BehaviorSubject, Subscription, take } from 'rxjs';
+import {
+    TuiLoaderModule,
+    TuiPrimitiveTextfieldModule,
+    TuiTextfieldControllerModule,
+} from '@taiga-ui/core';
 import { SectionNameService } from 'src/app/services/section-name/section-name.service';
 
 type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
@@ -18,7 +22,13 @@ type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 @Component({
     selector: 'app-questions-data-list',
     standalone: true,
-    imports: [CommonModule, TuiLoaderModule],
+    imports: [
+        CommonModule,
+        TuiLoaderModule,
+        TuiPrimitiveTextfieldModule,
+        AsyncPipe,
+        TuiTextfieldControllerModule,
+    ],
     templateUrl: './questions-data-list.component.html',
     styleUrl: './questions-data-list.component.less',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +39,7 @@ export class QuestionsDataListComponent implements OnInit, OnDestroy {
     readonly contentLoader = signal<boolean>(false);
     readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     allQuestions: QuestionInterface[] = [];
+    readonly questionsToShow$ = new BehaviorSubject<QuestionInterface[]>([]);
     sectionName = '';
     private sectionNameSub: Subscription = new Subscription();
     ngOnInit(): void {
@@ -43,8 +54,9 @@ export class QuestionsDataListComponent implements OnInit, OnDestroy {
                     methodName = this.firebase.getMhsTOQuestions();
                 }
                 methodName.pipe(take(1)).subscribe({
-                    next: (next) => {
-                        this.allQuestions = next;
+                    next: (value) => {
+                        this.allQuestions = value;
+                        this.questionsToShow$.next(value);
                     },
                     complete: () => {
                         this.contentLoader.set(false);
@@ -55,5 +67,16 @@ export class QuestionsDataListComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy(): void {
         this.sectionNameSub.unsubscribe();
+    }
+
+    searchQuestion(text: string): void {
+        console.log(text);
+        this.questionsToShow$.next(
+            this.allQuestions.filter((item) =>
+                item.question
+                    .toLocaleLowerCase()
+                    .includes(text.toLocaleLowerCase()),
+            ),
+        );
     }
 }

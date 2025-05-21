@@ -1,10 +1,18 @@
-@if(sectionName) {
-<p class="list-title">Список вопросов по разделу <b>{{sectionName}}</b></p>
-
-}
-
 <tui-loader [overlay]="true" [showLoader]="contentLoader()">
-    @for(item of allQuestions; track $index) {
+    @if(sectionName && allQuestions) {
+    <p class="list-title">Список вопросов по разделу <b>{{sectionName}}</b></p>
+    <div class="search-bar">
+        <tui-primitive-textfield
+            class="input-textfield"
+            tuiTextfieldSize="m"
+            tuiTextfieldIcon="tuiIconSearch"
+            (valueChange)="searchQuestion($event)"
+        >
+            Поиск по вопросу
+        </tui-primitive-textfield>
+    </div>
+
+    @for(item of questionsToShow$ | async; track $index) {
     <div class="list-container">
         @if(item?.image) {
         <img
@@ -23,5 +31,5 @@
             } }
         </ul>
     </div>
-    }
+    } }
 </tui-loader>
