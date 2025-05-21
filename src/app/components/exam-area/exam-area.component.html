@@ -41,8 +41,7 @@
         questionsForShow()?.answers?.hasOwnProperty(item)) {
         <tui-checkbox-labeled [formControlName]="item">
             <span [ngClass]="getClass(item, questionsForShow()?.correctAnswer!)"
-                >{{questionsForShow()?.answers?.[item]}} {{item}}
-                {{answersFormGroup.get(item)?.value}}</span
+                >{{questionsForShow()?.answers?.[item]}}</span
             >
         </tui-checkbox-labeled>
 

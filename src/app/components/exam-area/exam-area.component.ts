@@ -136,7 +136,6 @@ export class ExamAreaComponent implements OnInit {
         const correctAnswerArr: string[] = correctAnswer.split('');
         const userAnswers = this.answersFormGroup.getRawValue();
         let answerResult = true;
-        console.log('Ответы юзера:', userAnswers);
         this.answersFormGroup.disable();
 
         for (const key in answersData) {

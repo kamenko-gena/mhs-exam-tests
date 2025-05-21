@@ -70,7 +70,6 @@ export class QuestionsDataListComponent implements OnInit, OnDestroy {
     }
 
     searchQuestion(text: string): void {
-        console.log(text);
         this.questionsToShow$.next(
             this.allQuestions.filter((item) =>
                 item.question
