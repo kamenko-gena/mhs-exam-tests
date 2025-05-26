@@ -1,0 +1,44 @@
+<div class="header-content">
+    <a
+        target="_blank"
+        icon="tuiIconSend"
+        tuiLink
+        href="https://t.me/kamenkogena"
+        ><b>Kamenko</b></a
+    >
+
+    <div class="rigth-side-container">
+        <div class="links-block">
+            <a tuiLink routerLink="/">Главная</a>
+            <a tuiLink routerLink="/exams">Разделы</a>
+            <a tuiLink routerLink="/admin">Редактор</a>
+        </div>
+        <div class="login-button-block">
+            @if(currentUser()) {
+            <button
+                class="login-button"
+                size="m"
+                appearance="icon"
+                icon="tuiIconLogOutLarge"
+                tuiButton
+                type="button"
+                (click)="logout()"
+            >
+                Выход
+            </button>
+
+            } @else {
+            <button
+                class="login-button"
+                size="m"
+                routerLink="/login"
+                appearance="icon"
+                tuiButton
+                icon="tuiIconLogInLarge"
+            >
+                Вход
+            </button>
+            }
+        </div>
+    </div>
+</div>

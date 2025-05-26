@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h3, p {
+    font-size: large;
+}
+
+.page-img {
+    width: 30em;
+}
+
+.app-name {
+    margin: 0;
+}
+
+.title-container {
+    display: flex;
+}
+
+.info-container {
+    padding-left: 5em;
+}
+
+@media (max-width: 860px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .info-container {
+        padding-left: 0;
+    }
+
+    .page-img {
+        display: inline-table;
+        height: auto;
+        margin-top: 5em;
+    }
+}
+
+@media (max-width: 1003px) {
+    .title-container {
+        display: initial;
+    }
+}
