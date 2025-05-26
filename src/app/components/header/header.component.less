@@ -1,0 +1,48 @@
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.links-block, .rigth-side-container {
+    display: flex;
+    align-items: center;
+    gap: 4em;
+}
+
+a {
+    color: rgba(0, 0, 0, 0.678);
+    font-size: medium;
+}
+
+@media (max-width: 860px) {
+    .header-content {
+        display: block;
+    }
+
+    .links-block {
+        gap: 1em;
+    }
+
+    .rigth-side-container {
+        justify-content: space-between;
+    }
+
+    [tuiButton][data-size='m'] {
+        --tui-padding: 0;
+        --tui-font-text-m: 1;
+    }
+
+    a {
+        font-size: small;
+    }
+
+    .rigth-side-container {
+        gap: 1em;
+    }
+
+    .login-button {
+        font-size: smaller;
+    }
+
+}

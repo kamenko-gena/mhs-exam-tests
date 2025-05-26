@@ -7,6 +7,7 @@ import { RpoQuestionsComponent } from './components/rpo-questions/rpo-questions.
 import { AdminAreaComponent } from './components/admin-area/admin-area.component';
 import { authenticationGuard } from './guard/authentication.guard';
 import { adminAuthenticationGuard } from './guard/adminAuthentication.guard';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 export const appRoutes: Route[] = [
     {
@@ -32,8 +33,12 @@ export const appRoutes: Route[] = [
         canActivate: [adminAuthenticationGuard],
     },
     {
-        path: '',
+        path: 'exams',
         component: MainPageComponent,
+    },
+    {
+        path: '',
+        component: HomePageComponent,
     },
     {
         path: '**',

@@ -12,13 +12,10 @@ import {
     TuiAlertService,
     TuiButtonModule,
     TuiDialogModule,
-    TuiDialogService,
     TuiErrorModule,
 } from '@taiga-ui/core';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { Subscription, take, tap } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import {
-    TUI_PROMPT,
     TUI_VALIDATION_ERRORS,
     TuiDataListWrapperModule,
     TuiFieldErrorPipeModule,
@@ -27,7 +24,7 @@ import {
     TuiSelectModule,
     TuiTextareaModule,
 } from '@taiga-ui/kit';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
     FormControl,
     FormGroup,
@@ -80,14 +77,9 @@ type Collection = CollectionsName[number];
 export class AdminAreaComponent implements OnInit, OnDestroy {
     private readonly alerts = inject(TuiAlertService);
     private readonly sectionNameService = inject(SectionNameService);
-    private readonly authService = inject(AuthenticationService);
-    private readonly dialogs = inject(TuiDialogService);
-    private readonly router = inject(Router);
     private readonly firebase = inject(FirebaseService);
     readonly setLoading = signal<boolean>(false);
-    private authServiceSub: Subscription = new Subscription();
     private sectionServiceSub: Subscription = new Subscription();
-    readonly currentUser = signal<string | null>(null);
     readonly answersKey: AnswerKey[] = ['a', 'b', 'c', 'd', 'e', 'f'];
     readonly collections = COLLECTIONS;
     readonly collectionFormControl = new FormControl<Collection>('', {
@@ -134,20 +126,10 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
                     this.sectionNameService.setSectionName(value);
                 }
             });
-        this.authServiceSub = this.authService.getCurrentUser().subscribe({
-            next: (receivedUser) => {
-                if (!receivedUser) {
-                    this.currentUser.set(null);
-                    return;
-                }
-                this.currentUser.set(receivedUser.email);
-            },
-        });
     }
 
     ngOnDestroy(): void {
         this.sectionServiceSub.unsubscribe();
-        this.authServiceSub.unsubscribe();
     }
 
     getAnswersFormGroup(): FormGroup {
@@ -189,31 +171,5 @@ export class AdminAreaComponent implements OnInit, OnDestroy {
                 },
             });
         this.questionFormGroup.reset();
-    }
-
-    logout(): void {
-        if (!this.currentUser()) {
-            return;
-        }
-        this.dialogs
-            .open<boolean>(TUI_PROMPT, {
-                label: 'Выйти?',
-                size: 's',
-                data: {
-                    content: `Выход из учетной записи.`,
-                    yes: 'Да',
-                    no: 'Нет',
-                },
-            })
-            .pipe(
-                tap((userAnswer) => {
-                    if (userAnswer) {
-                        this.authService.logout().pipe(take(1)).subscribe();
-                        this.router.navigateByUrl('/');
-                    }
-                }),
-                take(1),
-            )
-            .subscribe();
     }
 }
