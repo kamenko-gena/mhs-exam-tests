@@ -133,11 +133,11 @@ export class LoginPageComponent {
                     .pipe(take(1))
                     .subscribe({
                         next: (user) => {
-                            user?.email === adminEmail;
+                            user?.email === adminEmail
+                                ? this.router.navigateByUrl('/admin')
+                                : this.router.navigateByUrl('/rpo');
                         },
-                    })
-                    ? this.router.navigateByUrl('/admin')
-                    : this.router.navigateByUrl('/rpo');
+                    });
             },
         });
     }
