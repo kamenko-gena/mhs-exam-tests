@@ -8,6 +8,7 @@ import { AdminAreaComponent } from './components/admin-area/admin-area.component
 import { authenticationGuard } from './guard/authentication.guard';
 import { adminAuthenticationGuard } from './guard/adminAuthentication.guard';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 
 export const appRoutes: Route[] = [
     {
@@ -42,6 +43,6 @@ export const appRoutes: Route[] = [
     },
     {
         path: '**',
-        component: MainPageComponent,
+        component: NotFoundPageComponent,
     },
 ];
