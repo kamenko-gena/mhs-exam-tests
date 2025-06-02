@@ -78,7 +78,7 @@
             <button
                 size="m"
                 appearance="accent"
-                [disabled]="!answersFormGroup.dirty"
+                [disabled]="!answersFormGroup.dirty || answersFormGroup.disabled"
                 tuiButton
                 (click)="answer((questionsForShow()?.correctAnswer!), currentNum, (questionsForShow()?.answers!))"
             >
