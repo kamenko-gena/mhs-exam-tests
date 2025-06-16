@@ -12,11 +12,19 @@ import { RouterLink } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase-service/firebase.service';
 import { QuestionInterface } from 'src/app/interfaces/question-interface';
 import { take } from 'rxjs';
+import { QuestionsDataListComponent } from '../questions-data-list/questions-data-list.component';
+import { SectionNameService } from 'src/app/services/section-name/section-name.service';
 
 @Component({
     selector: 'app-rpo-questions',
     standalone: true,
-    imports: [CommonModule, TuiButtonModule, ExamAreaComponent, RouterLink],
+    imports: [
+        CommonModule,
+        TuiButtonModule,
+        ExamAreaComponent,
+        RouterLink,
+        QuestionsDataListComponent,
+    ],
     templateUrl: './rpo-questions.component.html',
     styleUrl: './rpo-questions.component.less',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +34,8 @@ export class RpoQuestionsComponent implements OnInit {
     readonly showQuestions = signal<string | null>(null);
     readonly setLoading = signal<boolean>(false);
     private readonly firebase = inject(FirebaseService);
+    private readonly sectionNameService = inject(SectionNameService);
+
     allQuestions: QuestionInterface[] = [];
     examQuestions: QuestionInterface[] = [];
 
@@ -43,6 +53,7 @@ export class RpoQuestionsComponent implements OnInit {
                     );
                 },
                 complete: () => {
+                    this.sectionNameService.setSectionName('РПО');
                     this.setLoading.set(false);
                 },
             });
