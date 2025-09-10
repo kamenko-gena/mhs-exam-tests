@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "color-named": "never",
+        "declaration-empty-line-before": "never",
+        "rule-empty-line-before": "always",
+        "no-duplicate-selectors": true,
+        "no-descending-specificity": true,
+        "comment-no-empty": true
+    }
+  
+}
