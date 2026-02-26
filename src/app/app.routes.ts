@@ -9,6 +9,7 @@ import { authenticationGuard } from './guard/authentication.guard';
 import { adminAuthenticationGuard } from './guard/adminAuthentication.guard';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import { MvdQuestionComponent } from './components/mvd-question/mvd-question.component';
 
 export const appRoutes: Route[] = [
     {
@@ -22,6 +23,11 @@ export const appRoutes: Route[] = [
     {
         path: 'rpo',
         component: RpoQuestionsComponent,
+        canActivate: [authenticationGuard],
+    },
+    {
+        path: 'mvd',
+        component: MvdQuestionComponent,
         canActivate: [authenticationGuard],
     },
     {

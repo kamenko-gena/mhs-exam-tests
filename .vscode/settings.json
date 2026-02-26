@@ -1,3 +1,13 @@
 {
-    "nxConsole.nxWorkspacePath": ""
+    "nxConsole.nxWorkspacePath": "",
+    "stylelint.snippet": [
+        "css",
+        "postcss",
+        "less"
+    ],
+    "stylelint.validate": [
+        "css",
+        "postcss",
+        "less"
+    ]
 }

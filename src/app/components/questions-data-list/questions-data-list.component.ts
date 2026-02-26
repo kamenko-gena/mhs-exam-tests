@@ -52,6 +52,8 @@ export class QuestionsDataListComponent implements OnInit, OnDestroy {
                     methodName = this.firebase.getMhsMontazhQuestions();
                 } else if (section === 'МЧС-ТО') {
                     methodName = this.firebase.getMhsTOQuestions();
+                } else if (section === 'МВД') {
+                    methodName = this.firebase.getMvdQuestions();
                 }
                 methodName.pipe(take(1)).subscribe({
                     next: (value) => {

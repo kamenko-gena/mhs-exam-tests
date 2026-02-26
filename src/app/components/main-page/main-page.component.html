@@ -3,35 +3,5 @@
     <button routerLink="/mhs-montazh" tuiButton>Монтаж и наладка ПА</button>
     <button routerLink="/mhs-to" tuiButton>Техническое обслуживание ПА</button>
     <button routerLink="/rpo" tuiButton>Вопросы РПО</button>
+    <button routerLink="/mvd" tuiButton>Вопросы ДО МВД</button>
 </div>
-
-<ng-template let-observer>
-    <div class="badge-container">
-        <div class="badge-content">
-            <tui-badge class="badge" status="success"
-                ><tui-svg src="tuiIconCheckCircle"></tui-svg></tui-badge
-            >измененный интерфейс
-        </div>
-        <div class="badge-content">
-            <tui-badge class="badge" status="success"
-                ><tui-svg src="tuiIconCheckCircle"></tui-svg></tui-badge
-            >улучшена интерактивность
-        </div>
-        <div class="badge-content">
-            <tui-badge class="badge" status="success"
-                ><tui-svg src="tuiIconCheckCircle"></tui-svg></tui-badge
-            >добавлена возможность продолжить работу после выхода
-        </div>
-        <div class="badge-content">
-            <tui-badge class="badge" status="success"
-                ><tui-svg src="tuiIconCheckCircle"></tui-svg></tui-badge
-            >улучшен функционал переходов между вопросами
-        </div>
-    </div>
-
-    <div class="close-button">
-        <button (click)="observer.complete()" size="m" tuiButton type="button">
-            Ок
-        </button>
-    </div>
-</ng-template>
