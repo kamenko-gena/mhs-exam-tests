@@ -38,7 +38,7 @@ import { QuestionsDataListComponent } from '../questions-data-list/questions-dat
 import { SectionNameService } from 'src/app/services/section-name/section-name.service';
 
 type AnswerKey = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
-const COLLECTIONS = ['МЧС-Монтаж', 'МЧС-ТО', 'Вопросы РПО'];
+const COLLECTIONS = ['МЧС-Монтаж', 'МЧС-ТО', 'Вопросы РПО', 'МВД'];
 type CollectionsName = typeof COLLECTIONS;
 type Collection = CollectionsName[number];
 

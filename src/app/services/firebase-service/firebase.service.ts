@@ -23,6 +23,7 @@ export class FirebaseService {
         'mhs-montazh',
     );
     private readonly rpoQuestionsCollect = collection(this.firestore, 'rpo');
+    private readonly mvdQuestionsCollect = collection(this.firestore, 'mvd');
 
     getMhsTOQuestions(): Observable<QuestionInterface[]> {
         return collectionData(this.mhsToQuestionsCollect, {
@@ -41,16 +42,27 @@ export class FirebaseService {
             idField: 'id',
         }) as Observable<QuestionInterface[]>;
     }
+    getMvdQuestions(): Observable<QuestionInterface[]> {
+        return collectionData(this.mvdQuestionsCollect, {
+            idField: 'id',
+        }) as Observable<QuestionInterface[]>;
+    }
     //Отправка одного вопроса
     addQuestions(
         questionData: QuestionDataFormInterface,
         collectionName: string,
     ): Observable<string | null> {
         let collection = this.rpoQuestionsCollect;
-        if (collectionName === 'МЧС-ТО') {
-            collection = this.mhsToQuestionsCollect;
-        } else if (collectionName === 'МЧС-Монтаж') {
-            collection = this.mhsMontazhQuestionsCollect;
+        switch (collectionName) {
+            case 'МЧС-ТО':
+                collection = this.mhsToQuestionsCollect;
+                break;
+            case 'МЧС-Монтаж':
+                collection = this.mhsMontazhQuestionsCollect;
+                break;
+            case 'МВД':
+                collection = this.mvdQuestionsCollect;
+                break;
         }
         return from(addDoc(collection, questionData)).pipe(
             map((response) => response.id),
